@@ -28,7 +28,8 @@ const BoardView = () => {
   const [isLoadingLeaber, setIsLoadingLeaber] = useState(true);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [leaderboardData, setLeaderboardData] = useState(null);
-  const timerRef = useRef(null);
+
+  let isOver = false;
 
   // const leaderboardData = [
   //   { player: "Alice", score: 2000 },
@@ -305,28 +306,26 @@ const BoardView = () => {
   };
 
   const overGame = async () => {
-    setIsLoadingTransaction(true);
-    const boardScore = board.score;
-    setBoard(new Board());
-    if (signerContract && address) {
-      try {
-        // console.log(signerContract);
-        // console.log(board.score);
-        const tx = await signerContract.endGame(boardScore, {
-          gasLimit: 300000,
-        });
-        const receipt = await tx.wait();
-        console.log("Transaction confirmed:", receipt);
-        setIsLoadingTransaction(false);
-
-        handleScoreQuery();
-
-        // console.log(board.score);
-      } catch (error) {
-        console.error("Error update score:", error);
-        setIsLoadingTransaction(false);
-      }
-    }
+    // setIsLoadingTransaction(true);
+    // const boardScore = board.score;
+    // setBoard(new Board());
+    // if (signerContract && address) {
+    //   try {
+    //     // console.log(signerContract);
+    //     // console.log(board.score);
+    //     const tx = await signerContract.endGame(boardScore, {
+    //       gasLimit: 300000,
+    //     });
+    //     const receipt = await tx.wait();
+    //     console.log("Transaction confirmed:", receipt);
+    //     setIsLoadingTransaction(false);
+    //     handleScoreQuery();
+    //     // console.log(board.score);
+    //   } catch (error) {
+    //     console.error("Error update score:", error);
+    //     setIsLoadingTransaction(false);
+    //   }
+    // }
     // setBoard(new Board());
   };
   // end game
@@ -394,24 +393,53 @@ const BoardView = () => {
     setIsLoadingLeaber(true);
   };
 
-  if (!timerRef.current) {
-    // console.log(";;;;;")
-    if (board.hasLost()) {
+  const overAndEnd = async () => {
+    if (board.hasLost() && !isOver) {
       // 设置延时操作
-      timerRef.current = setTimeout(() => {
+      setTimeout(async () => {
         console.log("gameover");
+        setIsLoadingTransaction(true);
+        isOver = true;
+
+        const boardScore = board.score;
+       
+        console.log(isOver);
+        console.log(signerContract);
+        console.log(address);
+        // if (signerContract && address) {
+        //   try {
+        //     // console.log(signerContract);
+        //     console.log("sdfsdfsfds");
+        //     const tx = await signerContract.endGame(boardScore, {
+        //       gasLimit: 300000,
+        //     });
+        //     const receipt = await tx.wait();
+        //     console.log("Transaction confirmed:", receipt);
+        //     setBoard(new Board());
+
+        //     setIsLoadingTransaction(false);
+
+  
+        //     handleScoreQuery();
+  
+        //     // console.log(board.score);
+        //   } catch (error) {
+        //     console.error("Error update score:", error);
+        //     setIsLoadingTransaction(false);
+        //   }
+        // }
+       
       }, 5000); // 延时 3 秒
     }
-    // 清除定时器
-    clearTimeout(timerRef.current);
-  }
+  };
+  overAndEnd();
 
   return (
     <div>
       {isLoggedIn ? (
         <div>
           <div className="game-button" onClick={openLeaderboard}>
-            Leaerboard
+            Leaderboard
           </div>
           {isLoadingTransaction && (
             <div className="spinner-modal">
@@ -421,7 +449,7 @@ const BoardView = () => {
           )}
           {showLeaderboard && (
             <Modal onClose={closeLeaderboard}>
-              <h2>Leaerboard</h2>
+              <h2>Leaderboard</h2>
               <table>
                 <thead>
                   <tr>
@@ -475,7 +503,7 @@ const BoardView = () => {
               End
             </div>
             <div className="score-box">
-              <div className="score-header">PUNTOS</div>
+              <div className="score-header">PIONTS</div>
               <div>{board.score}</div>
             </div>
           </div>
