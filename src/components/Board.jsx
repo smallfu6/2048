@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import Tile from "./Tile";
 import Cell from "./Cell";
 import { Board } from "../helper";
@@ -9,7 +9,7 @@ import { CONTRACT_ABI } from "./ABI";
 import Modal from "./Modal";
 import InfoCard from "./InfoCard";
 
-const CONTRACT_ADDRESS = "0x1cf739eAe4e601c2be26298E40E91112c6FE0745";
+const CONTRACT_ADDRESS = "0x704Bb1FE9311020831E94aE2b6025B06E90e4527";
 
 const LineaSepoliaChainId = "0xe705";
 
@@ -21,7 +21,11 @@ const BoardView = () => {
   const [signerContract, setSignerContract] = useState(null);
   const [address, setAddress] = useState(null);
   const [connected, setConnected] = useState(false);
-  const [score, setScore] = useState(null); // In
+  const [score, setScore] = useState(null);
+  const [level, setLevel] = useState(null);
+  const [badgeList, setBadgeList] = useState(null);
+
+  const [isMint, setIsMint] = useState(null); // I
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingTransaction, setIsLoadingTransaction] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -95,6 +99,12 @@ const BoardView = () => {
           getScore();
           // 设置加载状态为 false
 
+          // 调用函数
+          getLevel();
+          // 设置加载状态为 false
+
+          getBadgeList();
+
           const getCurrentGameScore = async () => {
             try {
               const currScore = await newContract.scores(account);
@@ -102,34 +112,6 @@ const BoardView = () => {
                 if (board.score === 0) {
                   board.score = parseInt(currScore, 10);
                 }
-                // console.log("进行中的游戏分数：", currScore.toString());
-
-                // 加载棋盘
-                // const currNums = await newContract.getGameBoard(account);
-                // console.log("::", currNums);
-                // if (currNums.length > 0) {
-                //   console.log("进行中的棋盘：", currNums);
-                //   // setCurrentNums(currNums);
-                //   const size = currNums.length;
-                //   const elements = board.cells;
-                //   // 使用 for 循环遍历 cells
-                //   for (let i = 0; i < size; i++) {
-                //     for (let j = 0; j < size; j++) {
-                //       const value = currNums[i][j];
-                //       // 对 newArray 进行赋值，这里可以根据需要修改赋值逻辑
-                //       // board.cells[i][j] = val/boaue;
-                //       const tile = elements[i][j];
-                //       tile.value = value;
-                //       elements[i][j] = tile;
-                //     }
-                //   }
-
-                //   console.log("sdfsdf:", elements);
-                // setBoard((board) => ({
-                //   ...board,
-                //   cells: elements,
-                // }));
-                // }
               }
             } catch (error) {
               console.error("Error fetching score:", error);
@@ -148,7 +130,7 @@ const BoardView = () => {
     };
 
     initialize();
-  }, [board]);
+  }, [board, level, badgeList]);
 
   const switchToLineaSepolia = async (provider) => {
     try {
@@ -306,28 +288,9 @@ const BoardView = () => {
   };
 
   const overGame = async () => {
-    // setIsLoadingTransaction(true);
-    // const boardScore = board.score;
-    // setBoard(new Board());
-    // if (signerContract && address) {
-    //   try {
-    //     // console.log(signerContract);
-    //     // console.log(board.score);
-    //     const tx = await signerContract.endGame(boardScore, {
-    //       gasLimit: 300000,
-    //     });
-    //     const receipt = await tx.wait();
-    //     console.log("Transaction confirmed:", receipt);
-    //     setIsLoadingTransaction(false);
-    //     handleScoreQuery();
-    //     // console.log(board.score);
-    //   } catch (error) {
-    //     console.error("Error update score:", error);
-    //     setIsLoadingTransaction(false);
-    //   }
-    // }
-    // setBoard(new Board());
+    setBoard(new Board());
   };
+
   // end game
   const endGame = async () => {
     setIsLoadingTransaction(true);
@@ -343,6 +306,60 @@ const BoardView = () => {
         console.log("Transaction confirmed:", receipt);
         setBoard(new Board());
         handleScoreQuery();
+        setIsLoadingTransaction(false);
+
+        // console.log(board.score);
+      } catch (error) {
+        console.error("Error update score:", error);
+        setIsLoadingTransaction(false);
+      }
+    }
+  };
+
+  // 调用合约的读取函数
+  const getLevel = async () => {
+    if (signerContract && address) {
+      try {
+        const level = await signerContract.getUserTierAndMintStatus(address);
+        setLevel(level[0].toString());
+        console.log(level[0]);
+        setIsMint(level[1]);
+      } catch (error) {
+        console.error("Error fetching level:", error);
+      }
+    }
+  };
+
+  const getBadgeList = async () => {
+    if (signerContract && address) {
+      try {
+        const badges = await signerContract.getPlayerAllNFT(address);
+        setBadgeList(badges);
+        console.log(badgeList);
+      } catch (error) {
+        console.error("Error fetching badge list:", error);
+      }
+    }
+  };
+
+  const mintNft = async () => {
+    setIsLoadingTransaction(true);
+    // console.log(board);
+    if (signerContract && address) {
+      try {
+        // console.log(signerContract);
+        // console.log(board.score);
+        const tx = await signerContract.mintNFT(level, {
+          gasLimit: 300000,
+        });
+        const receipt = await tx.wait();
+        console.log("Transaction confirmed:", receipt);
+
+        // 更新勋章
+
+        getBadgeList();
+        getLevel();
+
         setIsLoadingTransaction(false);
 
         // console.log(board.score);
@@ -400,44 +417,18 @@ const BoardView = () => {
         console.log("gameover");
         setIsLoadingTransaction(true);
         isOver = true;
-
-        const boardScore = board.score;
-       
-        console.log(isOver);
-        console.log(signerContract);
-        console.log(address);
-        // if (signerContract && address) {
-        //   try {
-        //     // console.log(signerContract);
-        //     console.log("sdfsdfsfds");
-        //     const tx = await signerContract.endGame(boardScore, {
-        //       gasLimit: 300000,
-        //     });
-        //     const receipt = await tx.wait();
-        //     console.log("Transaction confirmed:", receipt);
-        //     setBoard(new Board());
-
-        //     setIsLoadingTransaction(false);
-
-  
-        //     handleScoreQuery();
-  
-        //     // console.log(board.score);
-        //   } catch (error) {
-        //     console.error("Error update score:", error);
-        //     setIsLoadingTransaction(false);
-        //   }
-        // }
-       
       }, 5000); // 延时 3 秒
     }
   };
-  overAndEnd();
+  // overAndEnd();
+
+  console.log(isMint);
+  console.log(badgeList);
 
   return (
-    <div>
+    <div className="container">
       {isLoggedIn ? (
-        <div>
+        <div className="game-container">
           <div className="game-button" onClick={openLeaderboard}>
             Leaderboard
           </div>
@@ -477,10 +468,6 @@ const BoardView = () => {
           )}
           {/* <p>Wallet: {formatAddress(address)}</p> */}
           {/* <p>Score: {score !== null ? score : "Loading..."}</p> */}
-          <InfoCard
-            address={formatAddress(address)}
-            score={score !== null ? score : "Loading..."}
-          />
           {/* <button onClick={disconnectWallet}>Disconnect</button> */}
           {/* <button onClick={handleScoreQuery}>Get Score</button> */}
           <div className="details-box">
@@ -516,6 +503,24 @@ const BoardView = () => {
       ) : (
         <p>Connecting to MetaMask...</p>
       )}
+
+      <div className="info-container">
+        <InfoCard
+          address={formatAddress(address)}
+          score={score !== null ? score : "Loading..."}
+          level={level}
+          isMint={isMint}
+          onClick={mintNft}
+          thumbnails={badgeList}
+        />
+        {/* <h2>关于2048游戏</h2>
+        <p>
+          2048是一款非常流行的数字益智游戏，游戏目标是将相同的数字块合并，直到达到2048这个数字。玩家通过滑动屏幕上的方块来合并相同的数字，并尽可能获得更高的分数。
+        </p>
+        <p>
+          游戏具有简单的操作和极高的重玩价值。每次游戏开始时，你都可以尝试不同的策略，以便获得更高的分数和更大的数字块。快来挑战自己，看看你能否在2048中获得高分！
+        </p> */}
+      </div>
     </div>
   );
 };

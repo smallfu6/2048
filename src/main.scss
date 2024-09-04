@@ -23,6 +23,29 @@ background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(87,64,124,1) 47%, rgb
   font-weight: bold;
 }
 
+.container {
+  display: flex;
+  justify-content: center; // 将子元素水平居中对齐
+  align-items: flex-start; // 将子元素垂直对齐到顶部
+  padding: 20px;
+  max-width: 1000px; // 减小最大宽度以使区域更靠近中间
+  margin: 0 auto; // 在页面中水平居中
+}
+
+.game-container {
+  flex: 2;
+  // 设置容器的宽度，根据需要调整
+  max-width: 60%; // 减小宽度使其更靠近中间
+}
+
+.info-container {
+  flex: 1;
+  padding: 20px;
+  border-left: 2px solid #ccc; // 为两个区域之间添加边框
+  // 设置容器的宽度，根据需要调整
+  max-width: 35%; // 增加宽度以使区域更靠近中间
+}
+
 .board {
   order: 1;
   width: 440px;
@@ -41,9 +64,13 @@ background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(87,64,124,1) 47%, rgb
 }
 
 .details-box {
+  // order: 1;
+  width: 440px;
   display: flex;
   align-items: center;
-  padding: 10px;
+  // padding: 0px;
+  margin-bottom: 10px;
+  margin-top: 10px;
   justify-content: space-between;
 }
 
@@ -157,7 +184,12 @@ background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(87,64,124,1) 47%, rgb
   font-family: 'Clear Sans', 'Arial', sans-serif; /* 与游戏风格一致的字体 */
   font-size: 22px; /* 增大字体尺寸 */
   font-weight: bold;
-  padding: 15px 30px;
+  order: 1;
+  width: 440px;
+  height: 50px;
+  // padding: 15px 30px;
+  margin-top: 10px;
+  margin-bottom: 20px;
   border: none;
   border-radius: 8px; /* 圆角按钮 */
   box-shadow: 0px 6px 0px #d0a83f; /* 按钮阴影效果 */
@@ -178,11 +210,13 @@ background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(87,64,124,1) 47%, rgb
 }
 
 .info-card {
+  order: 1;
+  width: 440px;
   background: #fff; /* 卡片背景颜色 */
   color: #333; /* 卡片文字颜色 */
   border-radius: 8px; /* 圆角边框 */
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* 卡片阴影 */
-  padding: 20px;
+  // padding: 20px;
   margin-top: 20px; /* 与按钮的间距 */
   font-family: 'Clear Sans', 'Arial', sans-serif; /* 与游戏风格一致的字体 */
 }
@@ -197,11 +231,51 @@ background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(87,64,124,1) 47%, rgb
 .card-content {
   font-size: 18px;
   line-height: 1.5;
+  padding: 10px;
+
+
+   // 新增按钮样式
+    // 新增按钮样式
+  .action-button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: #0056b3;
+    }
+
+    &.disabled {
+      background-color: #ddd;
+      color: #999;
+      cursor: not-allowed;
+    }
+  }
 }
 
 .card-content p {
   margin: 5px 0;
 }
+
+.thumbnail-list {
+  display: flex;
+  gap: 10px; /* 缩略图之间的间距 */
+  overflow-x: auto; /* 如果缩略图超过容器宽度，允许横向滚动 */
+}
+
+.thumbnail-item img {
+  width: 100px; /* 每个缩略图的宽度 */
+  height: 100px; /* 每个缩略图的高度 */
+  object-fit: cover; /* 保持图片比例 */
+  border-radius: 8px; /* 可选的圆角 */
+}
+
 
 
 table {
