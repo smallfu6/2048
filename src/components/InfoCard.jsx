@@ -62,17 +62,17 @@ const InfoCard = ({ address, score, level, isMint, onClick, thumbnails }) => {
           theme="light"
           transition={Zoom}
         />
-        {hasThumbnails ? (
+        {hasThumbnails && (
           <div className="thumbnail-list">
             {thumbnails.map((thumbnail, index) => (
               <div key={index} className="thumbnail-item">
-                <img src={thumbnail} alt={`Thumbnail ${index + 1}`} />
+                <img src={thumbnail} alt={`Badge ${index + 1}`} />
               </div>
             ))}
           </div>
-        ) : (
-          <p>No thumbnails available</p> // 或者使用占位图像或其他提示
         )}
+
+
         {showModal && (
           <div className="modal-content">
             <h2>Info Card</h2>

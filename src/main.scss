@@ -1,5 +1,7 @@
 @import '~react-toastify/dist/ReactToastify.css';
 @import './styles/modal.scss';
+@import './styles/season.scss';
+
 
 
 @font-face {
@@ -378,7 +380,7 @@ th:last-child, td:last-child {
 
 
 .score-header {
-  font-size: 50%;
+  font-size: 60%;
 }
 
 .score-box {

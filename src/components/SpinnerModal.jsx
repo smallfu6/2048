@@ -1,7 +1,6 @@
 import React from "react";
 
 const SpinnerModal = ({ isProcessing, isSuccess, isFailed }) => {
-  console.log(isProcessing, isSuccess);
   return (
     <div className={`spinner-modal ${!isProcessing ? "hidden" : ""}`}>
       {isProcessing && !isSuccess && !isFailed && ( // 交易进行中

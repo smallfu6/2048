@@ -12,6 +12,7 @@ import { CONTRACT_ABI } from "./ABI";
 import LeaderboardModal from "./LeaderboardModal";
 import InfoCard from "./InfoCard";
 import SpinnerModal from "./SpinnerModal";
+import Season from "./Season";
 
 const CONTRACT_ADDRESS = "0xA8c1499c108D8783c6c413c51683D003E4f6fa54";
 
@@ -91,7 +92,7 @@ const BoardView = () => {
             try {
               const score = await newContract.accumulatedScores(account); // 假设合约中有一个名为 `score` 的函数
               setScore(score.toString());
-              console.log(score.toString());
+              // console.log(score.toString());
             } catch (error) {
               console.error("Error fetching score:", error);
             }
@@ -106,7 +107,6 @@ const BoardView = () => {
             try {
               const level = await newContract.getUserTierAndMintStatus(account);
               setLevel(level[0].toString());
-              console.log(level[0]);
               setIsMint(level[1]);
             } catch (error) {
               console.error("Error fetching level:", error);
@@ -558,13 +558,7 @@ const BoardView = () => {
           onClick={mintNft}
           thumbnails={badgeList}
         />
-        {/* <h2>关于2048游戏</h2>
-        <p>
-          2048是一款非常流行的数字益智游戏，游戏目标是将相同的数字块合并，直到达到2048这个数字。玩家通过滑动屏幕上的方块来合并相同的数字，并尽可能获得更高的分数。
-        </p>
-        <p>
-          游戏具有简单的操作和极高的重玩价值。每次游戏开始时，你都可以尝试不同的策略，以便获得更高的分数和更大的数字块。快来挑战自己，看看你能否在2048中获得高分！
-        </p> */}
+        <Season />
       </div>
     </div>
   );
