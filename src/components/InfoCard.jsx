@@ -79,7 +79,6 @@ const InfoCard = ({ address, score, level, isMint, onClick, thumbnails }) => {
             <RuleModal onClose={closeRuleModal} isOpen={showModal} />
           </div>
         )}
-        ;
       </div>
     </div>
   );

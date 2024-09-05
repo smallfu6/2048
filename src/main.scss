@@ -98,6 +98,18 @@ body {
   }
 }
 
+/* 状态为 disabled 时的样式 */
+.resetButton.disabled {
+  background-color: #6c757d; /* 禁用时的背景色 */
+  cursor: not-allowed; /* 鼠标指针变成禁止图标 */
+  opacity: 0.6; /* 禁用时的透明度 */
+}
+
+/* 禁用状态下的悬浮效果 */
+.resetButton.disabled:hover {
+  background-color: #6c757d; /* 禁用状态下悬浮时保持背景色不变 */
+}
+
 .saveButton {
   background-color: #3864d3;
   color: rgba(255, 255, 255, 0.5);
@@ -118,6 +130,20 @@ body {
 
 }
 
+/* 状态为 disabled 时的样式 */
+.saveButton.disabled {
+  background-color: #6c757d; /* 禁用时的背景色 */
+  cursor: not-allowed; /* 鼠标指针变成禁止图标 */
+  opacity: 0.6; /* 禁用时的透明度 */
+}
+
+/* 禁用状态下的悬浮效果 */
+.saveButton.disabled:hover {
+  background-color: #6c757d; /* 禁用状态下悬浮时保持背景色不变 */
+}
+
+
+
 .endButton {
   background-color: #d3386a;
   color: rgba(255, 255, 255, 0.5);
@@ -135,6 +161,17 @@ body {
     cursor: not-allowed;
     // pointer-events: none; /* 禁用点击事件 */
   }
+}
+
+.endButton.disabled {
+  background-color: #6c757d; /* 禁用时的背景色 */
+  cursor: not-allowed; /* 鼠标指针变成禁止图标 */
+  opacity: 0.6; /* 禁用时的透明度 */
+}
+
+/* 禁用状态下的悬浮效果 */
+.endButton.disabled:hover {
+  background-color: #6c757d; /* 禁用状态下悬浮时保持背景色不变 */
 }
 
 
@@ -264,6 +301,18 @@ body {
     }
   }
 }
+
+.action-button.disabled {
+  background-color: #6c757d; /* 禁用时的背景色 */
+  cursor: not-allowed; /* 鼠标指针变成禁止图标 */
+  opacity: 0.6; /* 禁用时的透明度 */
+}
+
+/* 禁用状态下的悬浮效果 */
+.action-button.disabled:hover {
+  background-color: #6c757d; /* 禁用状态下悬浮时保持背景色不变 */
+}
+
 
 .card-content p {
   margin: 5px 0;

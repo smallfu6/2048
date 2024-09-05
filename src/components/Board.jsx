@@ -492,13 +492,13 @@ const BoardView = () => {
               New
             </div>
             <div
-              className={`saveButton ${board.score > 0 ? "disabled" : ""}`}
+              className={`saveButton ${board.score === 0 ? "disabled" : ""}`}
               onClick={board.score > 0 ? saveGame : null}
             >
               Save
             </div>
             <div
-              className={`endButton ${board.score > 0 ? "disabled" : ""}`}
+              className={`endButton ${board.score === 0 ? "disabled" : ""}`}
               onClick={board.score > 0 ? endGame : null}
             >
               End
