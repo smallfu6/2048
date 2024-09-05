@@ -1,7 +1,7 @@
 import React from 'react';
-// import './Modal.scss'; // 添加弹框样式
 
-const Modal = ({ children, onClose }) => {
+
+const LeaderboardModal = ({ children, onClose }) => {
   return (
     <div className="modal-overlay">
       <div className="modal-content">
@@ -14,4 +14,4 @@ const Modal = ({ children, onClose }) => {
   );
 };
 
-export default Modal;
+export default LeaderboardModal;

@@ -1,3 +1,7 @@
+@import '~react-toastify/dist/ReactToastify.css';
+@import './styles/modal.scss';
+
+
 @font-face {
   font-family: "Clear Sans";
   src: url("../src/clear-sans.ttf") format("truetype");
@@ -6,7 +10,7 @@
 body {
   display: flex;
   background: rgb(2,0,36);
-background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(87,64,124,1) 47%, rgba(0,212,255,1) 100%);
+  background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(87,64,124,1) 47%, rgba(0,212,255,1) 100%);
   color: white;
   flex-direction: column;
   justify-content: center;
@@ -25,26 +29,27 @@ background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(87,64,124,1) 47%, rgb
 
 .container {
   display: flex;
-  justify-content: center; // 将子元素水平居中对齐
-  align-items: flex-start; // 将子元素垂直对齐到顶部
+  justify-content: center; /* 子元素水平居中对齐 */
+  align-items: flex-start; /* 子元素垂直对齐到顶部 */
   padding: 20px;
-  max-width: 1000px; // 减小最大宽度以使区域更靠近中间
-  margin: 0 auto; // 在页面中水平居中
+  max-width: 1200px; /* 减小最大宽度以使区域更靠近中间 */
+  margin: 0 auto; /* 在页面中水平居中 */
 }
 
 .game-container {
   flex: 2;
-  // 设置容器的宽度，根据需要调整
-  max-width: 60%; // 减小宽度使其更靠近中间
+  /* 设置容器的宽度，根据需要调整 */
+  max-width: 70%; /* 减小宽度使其更靠近中间 */
 }
 
 .info-container {
-  flex: 1;
-  padding: 20px;
-  border-left: 2px solid #ccc; // 为两个区域之间添加边框
-  // 设置容器的宽度，根据需要调整
-  max-width: 35%; // 增加宽度以使区域更靠近中间
+  flex: 1.5; /* 增加比例，使info-container占据更大的空间 */
+  width: 50%; /* 调整宽度 */
+  padding: 10px;
+  border-left: 2px solid #ccc; /* 为两个区域之间添加边框 */
+  max-width: 40%; /* 调整最大宽度 */
 }
+
 
 .board {
   order: 1;
@@ -82,10 +87,15 @@ background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(87,64,124,1) 47%, rgb
   padding: 10px 20px;
   border-radius: 7px;
   transition: color 0.3s ease, background-color 0.3s ease;
-  // &:hover {
-  //   background-color: #76d338;
-  //   color: rgba(255, 255, 255, 1);
-  // }
+  &:hover {
+    background-color: #76d338;
+    color: rgba(255, 255, 255, 1);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    // pointer-events: none; /* 禁用点击事件 */
+  }
 }
 
 .saveButton {
@@ -96,10 +106,16 @@ background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(87,64,124,1) 47%, rgb
   padding: 10px 20px;
   border-radius: 7px;
   transition: color 0.3s ease, background-color 0.3s ease;
-  // &:hover {
-  //   background-color: #3864d3;
-  //   color: rgba(255, 255, 255, 1);
-  // }
+  &:hover {
+    background-color: #3864d3;
+    color: rgba(255, 255, 255, 1);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    // pointer-events: none; /* 禁用点击事件 */
+  }
+
 }
 
 .endButton {
@@ -110,11 +126,17 @@ background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(87,64,124,1) 47%, rgb
   padding: 10px 20px;
   border-radius: 7px;
   transition: color 0.3s ease, background-color 0.3s ease;
-  // &:hover {
-  //   background-color: #d3386a;
-  //   color: rgba(255, 255, 255, 1);
-  // }
+  &:hover {
+    background-color: #d3386a;
+    color: rgba(255, 255, 255, 1);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    // pointer-events: none; /* 禁用点击事件 */
+  }
 }
+
 
 .modal-overlay {
   position: fixed;
@@ -140,6 +162,9 @@ background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(87,64,124,1) 47%, rgb
 }
 
 .close-button {
+  font-family: 'Clear Sans', 'Arial', sans-serif; /* 与游戏风格一致的字体 */
+  font-size: 22px; /* 增大字体尺寸 */
+  font-weight: bold;
   margin-top: 20px;
   background: #8f7a66;
   color: white;
@@ -149,47 +174,22 @@ background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(87,64,124,1) 47%, rgb
   cursor: pointer;
 }
 
-.spinner-modal {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: rgba(0, 0, 0, 0.8);
-  padding: 20px;
-  border-radius: 10px;
-  text-align: center;
-  color: white;
-  font-family: 'Arcade', sans-serif; /* 游戏风格字体 */
-  z-index: 1000;
-}
-
-.spinner {
-  border: 4px solid rgba(255, 255, 255, 0.3);
-  border-radius: 50%;
-  border-top: 4px solid #fff;
-  width: 40px;
-  height: 40px;
-  animation: spin 1s linear infinite;
-  margin: 0 auto;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
 
 .game-button {
   background: linear-gradient(135deg, #f2b632, #f9a800); /* 渐变色背景 */
   color: #fff; /* 白色字体 */
   font-family: 'Clear Sans', 'Arial', sans-serif; /* 与游戏风格一致的字体 */
-  font-size: 22px; /* 增大字体尺寸 */
+  font-size: 30px; /* 增大字体尺寸 */
   font-weight: bold;
+  display: flex; 
+  justify-content: center; /* 水平居中对齐 */
+  align-items: center; /* 垂直居中对齐 */
   order: 1;
-  width: 440px;
+  width: 420px;
   height: 50px;
-  // padding: 15px 30px;
-  margin-top: 10px;
-  margin-bottom: 20px;
+  padding: 10px 10px;
+  // margin-top: 10px;
+  margin-bottom: 30px;
   border: none;
   border-radius: 8px; /* 圆角按钮 */
   box-shadow: 0px 6px 0px #d0a83f; /* 按钮阴影效果 */
@@ -212,7 +212,8 @@ background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(87,64,124,1) 47%, rgb
 .info-card {
   order: 1;
   width: 440px;
-  background: #fff; /* 卡片背景颜色 */
+  // background: #fff; /* 卡片背景颜色 */
+  background-color: #5b71cd; /* 2048 游戏风格的背景颜色 */
   color: #333; /* 卡片文字颜色 */
   border-radius: 8px; /* 圆角边框 */
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* 卡片阴影 */
@@ -232,29 +233,34 @@ background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(87,64,124,1) 47%, rgb
   font-size: 18px;
   line-height: 1.5;
   padding: 10px;
+  position: relative;
 
 
    // 新增按钮样式
     // 新增按钮样式
   .action-button {
-    margin-top: 10px;
-    padding: 10px 20px;
-    font-size: 16px;
-    color: #fff;
-    background-color: #007bff;
-    border: none;
-    border-radius: 5px;
+    background: linear-gradient(135deg, #f2b632, #f9a800); /* 渐变色背景 */
+    color: rgba(24, 23, 23, 0.5);
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    font-family: 'Press Start 2P', cursive; /* 游戏风格字体 */
+
+    font-size: 15px;
+    font-weight: bold;
+    padding: 10px 10px;
+    // margin-left: 50px;
+    margin-right: 20px;
+    border-radius: 7px;
+    transition: color 0.3s ease, background-color 0.3s ease;
 
     &:hover {
-      background-color: #0056b3;
+      background-color: #3864d3;
+      color: rgba(255, 255, 255, 1);
     }
-
-    &.disabled {
-      background-color: #ddd;
-      color: #999;
+  
+    &:disabled {
       cursor: not-allowed;
+      pointer-events: none; /* 禁用点击事件 */
+      opacity: 0.5; /* 禁用状态下的透明度 */
     }
   }
 }
@@ -263,15 +269,32 @@ background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(87,64,124,1) 47%, rgb
   margin: 5px 0;
 }
 
+
+.view-rule {
+  position: absolute;
+  top: 10px; /* 调整图标距离顶部的距离 */
+  right: 10px; /* 调整图标距离右边的距离 */
+  cursor: pointer; /* 更改鼠标悬停时的样式 */
+}
+
+.level-and-button {
+  display: flex;
+  justify-content: space-between; /* 使子元素（级别和按钮）分布在容器的两端 */
+  align-items: center; /* 垂直居中对齐 */
+  margin-top: 10px; /* 可选：增加顶部间距以与其他内容分开 */
+
+}
+
 .thumbnail-list {
   display: flex;
+  margin-top: 20px;
   gap: 10px; /* 缩略图之间的间距 */
   overflow-x: auto; /* 如果缩略图超过容器宽度，允许横向滚动 */
 }
 
 .thumbnail-item img {
-  width: 100px; /* 每个缩略图的宽度 */
-  height: 100px; /* 每个缩略图的高度 */
+  width: 90px; /* 每个缩略图的宽度 */
+  height: 90px; /* 每个缩略图的高度 */
   object-fit: cover; /* 保持图片比例 */
   border-radius: 8px; /* 可选的圆角 */
 }

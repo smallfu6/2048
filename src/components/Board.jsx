@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from "react";
+import { toast, ToastContainer, Zoom } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import Tile from "./Tile";
 import Cell from "./Cell";
 import { Board } from "../helper";
@@ -6,10 +9,11 @@ import useEvent from "../hooks/useEvent";
 import GameOverlay from "./GameOverlay";
 import { ethers } from "ethers";
 import { CONTRACT_ABI } from "./ABI";
-import Modal from "./Modal";
+import LeaderboardModal from "./LeaderboardModal";
 import InfoCard from "./InfoCard";
+import SpinnerModal from "./SpinnerModal";
 
-const CONTRACT_ADDRESS = "0x704Bb1FE9311020831E94aE2b6025B06E90e4527";
+const CONTRACT_ADDRESS = "0xA8c1499c108D8783c6c413c51683D003E4f6fa54";
 
 const LineaSepoliaChainId = "0xe705";
 
@@ -27,20 +31,17 @@ const BoardView = () => {
 
   const [isMint, setIsMint] = useState(null); // I
   const [isLoading, setIsLoading] = useState(true);
-  const [isLoadingTransaction, setIsLoadingTransaction] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [isFailed, setIsFailed] = useState(false);
+
+
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoadingLeaber, setIsLoadingLeaber] = useState(true);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [leaderboardData, setLeaderboardData] = useState(null);
 
   let isOver = false;
-
-  // const leaderboardData = [
-  //   { player: "Alice", score: 2000 },
-  //   { player: "Bob", score: 1800 },
-  //   { player: "Charlie", score: 1500 },
-  //   // 添加更多数据
-  // ];
 
   useEffect(() => {
     const initialize = async () => {
@@ -90,6 +91,7 @@ const BoardView = () => {
             try {
               const score = await newContract.accumulatedScores(account); // 假设合约中有一个名为 `score` 的函数
               setScore(score.toString());
+              console.log(score.toString());
             } catch (error) {
               console.error("Error fetching score:", error);
             }
@@ -99,9 +101,29 @@ const BoardView = () => {
           getScore();
           // 设置加载状态为 false
 
+          // 调用合约的读取函数
+          const getLevel = async () => {
+            try {
+              const level = await newContract.getUserTierAndMintStatus(account);
+              setLevel(level[0].toString());
+              console.log(level[0]);
+              setIsMint(level[1]);
+            } catch (error) {
+              console.error("Error fetching level:", error);
+            }
+          };
           // 调用函数
           getLevel();
           // 设置加载状态为 false
+
+          const getBadgeList = async () => {
+            try {
+              const badges = await newContract.getPlayerAllNFT(account);
+              setBadgeList(badges);
+            } catch (error) {
+              console.error("Error fetching badge list:", error);
+            }
+          };
 
           getBadgeList();
 
@@ -130,7 +152,7 @@ const BoardView = () => {
     };
 
     initialize();
-  }, [board, level, badgeList]);
+  }, [board]);
 
   const switchToLineaSepolia = async (provider) => {
     try {
@@ -195,6 +217,29 @@ const BoardView = () => {
     setConnected(false);
   };
 
+  const updateLevel = async () => {
+    if (gameContract && address) {
+      try {
+        const level = await gameContract.getUserTierAndMintStatus(address);
+        setLevel(level[0].toString());
+        setIsMint(level[1]);
+      } catch (error) {
+        console.error("Error fetching score:", error);
+      }
+    }
+  };
+
+  const updateBadgeList = async () => {
+    if (gameContract && address) {
+      try {
+        const badges = await gameContract.getPlayerAllNFT(address);
+        setBadgeList(badges);
+      } catch (error) {
+        console.error("Error fetching score:", error);
+      }
+    }
+  };
+
   const handleScoreQuery = async () => {
     if (gameContract && address) {
       try {
@@ -251,7 +296,7 @@ const BoardView = () => {
   };
 
   const saveGame = async () => {
-    setIsLoadingTransaction(true);
+    setIsProcessing(true);
     const cells = board.cells;
     const size = cells.length;
 
@@ -277,14 +322,23 @@ const BoardView = () => {
         });
         const receipt = await tx.wait();
         console.log("Transaction confirmed:", receipt);
-        setIsLoadingTransaction(false);
-        // handleScoreQuery()
+        setIsSuccess(true);
+
+        handleScoreQuery();
+        // toast.success("Score saved successfully!");
         // console.log(board.score);
       } catch (error) {
         console.error("Error update score:", error);
-        setIsLoadingTransaction(false);
+        setIsSuccess(false);
+        setIsFailed(true);
+        // toast.error("Failed to save score. Please try again.");
+      } finally {
+        setTimeout(() => setIsProcessing(false), 2000);
       }
     }
+
+    setTimeout(() => setIsSuccess(false), 2100);
+    setTimeout(() => setIsFailed(false), 2100);
   };
 
   const overGame = async () => {
@@ -293,7 +347,7 @@ const BoardView = () => {
 
   // end game
   const endGame = async () => {
-    setIsLoadingTransaction(true);
+    setIsProcessing(true);
     // console.log(board);
     if (signerContract && address) {
       try {
@@ -306,44 +360,26 @@ const BoardView = () => {
         console.log("Transaction confirmed:", receipt);
         setBoard(new Board());
         handleScoreQuery();
-        setIsLoadingTransaction(false);
+        setIsSuccess(true);
 
+        // toast.success("Score saved successfully!");
         // console.log(board.score);
       } catch (error) {
         console.error("Error update score:", error);
-        setIsLoadingTransaction(false);
+        setIsSuccess(false);
+        setIsFailed(true);
+        // toast.error("Failed to save score. Please try again.");
+      } finally {
+        setTimeout(() => setIsProcessing(false), 2000);
       }
     }
-  };
+    setTimeout(() => setIsSuccess(false), 2100);
+    setTimeout(() => setIsFailed(false), 2100);
 
-  // 调用合约的读取函数
-  const getLevel = async () => {
-    if (signerContract && address) {
-      try {
-        const level = await signerContract.getUserTierAndMintStatus(address);
-        setLevel(level[0].toString());
-        console.log(level[0]);
-        setIsMint(level[1]);
-      } catch (error) {
-        console.error("Error fetching level:", error);
-      }
-    }
-  };
-
-  const getBadgeList = async () => {
-    if (signerContract && address) {
-      try {
-        const badges = await signerContract.getPlayerAllNFT(address);
-        setBadgeList(badges);
-        console.log(badgeList);
-      } catch (error) {
-        console.error("Error fetching badge list:", error);
-      }
-    }
   };
 
   const mintNft = async () => {
-    setIsLoadingTransaction(true);
+    setIsProcessing(true);
     // console.log(board);
     if (signerContract && address) {
       try {
@@ -357,17 +393,25 @@ const BoardView = () => {
 
         // 更新勋章
 
-        getBadgeList();
-        getLevel();
-
-        setIsLoadingTransaction(false);
-
+        updateBadgeList();
+        updateLevel();
+        setIsSuccess(true);
+        // toast.success("NFT badge minted successfully!");
         // console.log(board.score);
       } catch (error) {
-        console.error("Error update score:", error);
-        setIsLoadingTransaction(false);
+        console.error("Error mint nft:", error);
+        setIsSuccess(false);
+        setIsFailed(true);
+
+
+        // toast.error("Failed to mint NFT badge. Please try again.");
+      } finally {
+        setTimeout(() => setIsProcessing(false), 2000);
       }
     }
+    setTimeout(() => setIsSuccess(false), 2100);
+    setTimeout(() => setIsFailed(false), 2100);
+
   };
 
   // Function to format address with ellipsis
@@ -415,76 +459,46 @@ const BoardView = () => {
       // 设置延时操作
       setTimeout(async () => {
         console.log("gameover");
-        setIsLoadingTransaction(true);
+        setIsProcessing(true);
         isOver = true;
       }, 5000); // 延时 3 秒
     }
   };
   // overAndEnd();
 
-  console.log(isMint);
-  console.log(badgeList);
-
   return (
     <div className="container">
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        transition={Zoom}
+      />
       {isLoggedIn ? (
         <div className="game-container">
-          <div className="game-button" onClick={openLeaderboard}>
-            Leaderboard
-          </div>
-          {isLoadingTransaction && (
-            <div className="spinner-modal">
-              <div className="spinner"></div>
-              <p>Processing, please wait...</p>
-            </div>
-          )}
-          {showLeaderboard && (
-            <Modal onClose={closeLeaderboard}>
-              <h2>Leaderboard</h2>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Player</th>
-                    <th>Score</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {isLoadingLeaber ? (
-                    <tr>
-                      <td>Loading...</td>
-                    </tr>
-                  ) : (
-                    leaderboardData &&
-                    leaderboardData.map((entry, index) => (
-                      <tr key={index}>
-                        <td>{formatAddress(entry[0])}</td>
-                        <td>{entry[1].toString()}</td>
-                      </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
-            </Modal>
-          )}
-          {/* <p>Wallet: {formatAddress(address)}</p> */}
-          {/* <p>Score: {score !== null ? score : "Loading..."}</p> */}
-          {/* <button onClick={disconnectWallet}>Disconnect</button> */}
-          {/* <button onClick={handleScoreQuery}>Get Score</button> */}
+          <SpinnerModal isProcessing={isProcessing} isSuccess={isSuccess} isFailed={isFailed} />
           <div className="details-box">
             <div
-              className="resetButton"
+              className={`resetButton ${board.score > 0 ? "disabled" : ""}`}
               onClick={board.score > 0 ? null : resetGame}
             >
               New
             </div>
             <div
-              className="saveButton"
+              className={`saveButton ${board.score > 0 ? "disabled" : ""}`}
               onClick={board.score > 0 ? saveGame : null}
             >
               Save
             </div>
             <div
-              className="endButton"
+              className={`endButton ${board.score > 0 ? "disabled" : ""}`}
               onClick={board.score > 0 ? endGame : null}
             >
               End
@@ -505,10 +519,41 @@ const BoardView = () => {
       )}
 
       <div className="info-container">
+        <div className="game-button" onClick={openLeaderboard}>
+          Leaderboard
+        </div>
+        {showLeaderboard && (
+          <LeaderboardModal onClose={closeLeaderboard}>
+            <h2>Leaderboard</h2>
+            <table>
+              <thead>
+                <tr>
+                  <th>Player</th>
+                  <th>Score</th>
+                </tr>
+              </thead>
+              <tbody>
+                {isLoadingLeaber ? (
+                  <tr>
+                    <td>Loading...</td>
+                  </tr>
+                ) : (
+                  leaderboardData &&
+                  leaderboardData.map((entry, index) => (
+                    <tr key={index}>
+                      <td>{formatAddress(entry[0])}</td>
+                      <td>{entry[1].toString()}</td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </LeaderboardModal>
+        )}
         <InfoCard
           address={formatAddress(address)}
           score={score !== null ? score : "Loading..."}
-          level={level}
+          level={level !== null ? level : "Loading..."}
           isMint={isMint}
           onClick={mintNft}
           thumbnails={badgeList}
