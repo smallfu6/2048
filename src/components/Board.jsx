@@ -155,19 +155,19 @@ const BoardView = () => {
   }, [board]);
 
   const switchToLineaSepolia = async (provider) => {
+    const networkParams = {
+      chainId: LineaSepoliaChainId,
+      chainName: "Linea Sepolia",
+      rpcUrls: ["https://sepolia.linea.build"],
+      nativeCurrency: {
+        name: "Ether",
+        symbol: "ETH",
+        decimals: 18,
+      },
+      blockExplorerUrls: ["https://sepolia.linea.build"],
+    };
+    
     try {
-      const networkParams = {
-        chainId: LineaSepoliaChainId,
-        chainName: "Linea Sepolia",
-        rpcUrls: ["https://sepolia.linea.build"],
-        nativeCurrency: {
-          name: "Ether",
-          symbol: "ETH",
-          decimals: 18,
-        },
-        blockExplorerUrls: ["https://sepolia.linea.build"],
-      };
-
       // 请求切换到 Linea Sepolia 网络
       await provider.send("wallet_switchEthereumChain", [
         { chainId: LineaSepoliaChainId },
@@ -178,14 +178,25 @@ const BoardView = () => {
       if (newChainId === LineaSepoliaChainId) {
         console.log("Successfully switched to Linea Sepolia network.");
       } else {
-        console.error("Failed to switch network.");
+        console.log("Failed to switch network.");
+        toast.error("Failed to switch network.");
       }
     } catch (error) {
       if (error.code === 4902) {
         // 网络不存在，需要添加网络
-        console.error("Network not found. Please add the network manually.");
+        try {
+          await provider.send("wallet_addEthereumChain", [networkParams]);
+          console.log("Network added successfully.");
+        } catch (addError) {
+          console.log("Failed to add network:", addError);
+          toast.error("Network added successfully.");
+        }
+        console.log("Network not found. Please add the network manually.");
+        toast.error("Network not found. Please add the network manually.");
+
       } else {
-        console.error("Network switch error:", error);
+        console.log("Network switch error:", error);
+        toast.error("Network switch error:", error);
       }
     }
   };
