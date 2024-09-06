@@ -14,9 +14,14 @@ import InfoCard from "./InfoCard";
 import SpinnerModal from "./SpinnerModal";
 import Season from "./Season";
 
-const CONTRACT_ADDRESS = "0x6780148Fc1BbfdaFF7d956BB60c846aEE6530Fd3";
+// TODO: env
+// const CONTRACT_ADDRESS = "0x6780148Fc1BbfdaFF7d956BB60c846aEE6530Fd3"; // linea sepolia
+const CONTRACT_ADDRESS = "0x2a065C09B91b1a4fc2F3f26bf3893338700BB36a"; // linea mainnet
 
-const LineaSepoliaChainId = "0xe705";
+
+// const LineaSepoliaChainId = "0xe705";
+const LineaMainnetChainId = "0xe708";
+
 
 const BoardView = () => {
   const [board, setBoard] = useState(new Board());
@@ -60,8 +65,12 @@ const BoardView = () => {
           const currentChainId = await newProvider.send("eth_chainId", []);
 
           // 如果当前网络不匹配，则请求切换到 Linea Sepolia 网络
-          if (currentChainId !== LineaSepoliaChainId) {
-            await switchToLineaSepolia(newProvider);
+          // if (currentChainId !== LineaSepoliaChainId) {
+          //   await switchToLineaSepolia(newProvider);
+          // }
+
+          if (currentChainId !== LineaMainnetChainId) {
+            await switchToLineaMainnet(newProvider);
           }
 
           // 请求用户账户
@@ -179,29 +188,43 @@ const BoardView = () => {
     });
   };
 
-  const switchToLineaSepolia = async (provider) => {
-    const networkParams = {
-      chainId: LineaSepoliaChainId,
-      chainName: "Linea Sepolia",
-      rpcUrls: ["https://sepolia.linea.build"],
+  const switchToLineaMainnet = async (provider) => {
+    // const networkParams = {
+    //   chainId: LineaSepoliaChainId,
+    //   chainName: "Linea Sepolia",
+    //   rpcUrls: ["https://sepolia.linea.build"],
+    //   nativeCurrency: {
+    //     name: "Ether",
+    //     symbol: "ETH",
+    //     decimals: 18,
+    //   },
+    //   blockExplorerUrls: ["https://sepolia.linea.build"],
+    // }; 
+
+    // linea mainnet
+     const networkParams = {
+      chainId: LineaMainnetChainId,
+      chainName: "Linea Mainnet",
+      rpcUrls: ["https://linea-mainnet.infura.io/v3/"],
       nativeCurrency: {
         name: "Ether",
         symbol: "ETH",
         decimals: 18,
       },
-      blockExplorerUrls: ["https://sepolia.linea.build"],
-    };
+      blockExplorerUrls: ["https://lineascan.build"],
+    }; 
+    
 
     try {
       // 请求切换到 Linea Sepolia 网络
       await provider.send("wallet_switchEthereumChain", [
-        { chainId: LineaSepoliaChainId },
+        { chainId: LineaMainnetChainId },
       ]);
 
       // 确保切换成功
       const newChainId = await provider.send("eth_chainId", []);
-      if (newChainId === LineaSepoliaChainId) {
-        console.log("Successfully switched to Linea Sepolia network.");
+      if (newChainId === LineaMainnetChainId) {
+        console.log("Successfully switched to Linea Mainnet network.");
       } else {
         console.log("Failed to switch network.");
         toast.error("Failed to switch network.");
