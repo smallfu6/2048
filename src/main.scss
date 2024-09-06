@@ -27,8 +27,13 @@ body {
 .main-title {
   font-size: 3rem; /* Adjust as needed */
   text-align: left;
-  color: #fff; /* Text color */
-  animation: shadow-appear 1s ease-out; /* Animation for shadow effect */
+  margin-left: 70px;
+}
+
+
+.title-2048 {
+  font-size: 4rem; /* Adjust as needed */
+  color: #5b71cd; /* Text color */
 }
 
 .text {

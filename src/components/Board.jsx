@@ -21,7 +21,6 @@ const LineaSepoliaChainId = "0xe705";
 const BoardView = () => {
   const [board, setBoard] = useState(new Board());
   const [provider, setProvider] = useState(null);
-  const [signer, setSigner] = useState(null);
   const [gameContract, setContract] = useState(null);
   const [signerContract, setSignerContract] = useState(null);
   const [address, setAddress] = useState(null);
@@ -36,13 +35,11 @@ const BoardView = () => {
   const [isSuccess, setIsSuccess] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
 
-
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoadingLeaber, setIsLoadingLeaber] = useState(true);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [leaderboardData, setLeaderboardData] = useState(null);
-
-  let isOver = false;
+  const [hasRun, setHasRun] = useState(false); // 确保操作只执行一次
 
   useEffect(() => {
     const initialize = async () => {
@@ -141,7 +138,6 @@ const BoardView = () => {
           };
 
           getCurrentGameScore();
-
           setIsLoading(false);
         } catch (error) {
           console.error("Initialization error:", error);
@@ -193,7 +189,6 @@ const BoardView = () => {
         }
         console.log("Network not found. Please add the network manually.");
         toast.error("Network not found. Please add the network manually.");
-
       } else {
         console.log("Network switch error:", error);
         toast.error("Network switch error:", error);
@@ -211,7 +206,6 @@ const BoardView = () => {
           CONTRACT_ABI,
           newSigner
         );
-        setSigner(newSigner);
         setContract(newContract);
         setAddress(accounts[0]);
         setConnected(true);
@@ -222,7 +216,6 @@ const BoardView = () => {
   };
 
   const disconnectWallet = () => {
-    setSigner(null);
     setContract(null);
     setAddress(null);
     setConnected(false);
@@ -347,9 +340,9 @@ const BoardView = () => {
     setTimeout(() => setIsFailed(false), 2100);
   };
 
-  const overGame = async () => {
-    setBoard(new Board());
-  };
+  // const overGame = async () => {
+  //   setBoard(new Board());
+  // };
 
   // end game
   const endGame = async () => {
@@ -379,7 +372,6 @@ const BoardView = () => {
     }
     setTimeout(() => setIsSuccess(false), 2100);
     setTimeout(() => setIsFailed(false), 2100);
-
   };
 
   const mintNft = async () => {
@@ -405,7 +397,6 @@ const BoardView = () => {
         setIsSuccess(false);
         setIsFailed(true);
 
-
         // toast.error("Failed to mint NFT badge. Please try again.");
       } finally {
         setTimeout(() => setIsProcessing(false), 2000);
@@ -413,7 +404,6 @@ const BoardView = () => {
     }
     setTimeout(() => setIsSuccess(false), 2100);
     setTimeout(() => setIsFailed(false), 2100);
-
   };
 
   // Function to format address with ellipsis
@@ -422,7 +412,42 @@ const BoardView = () => {
     return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
   };
 
-  // console.log(address);
+  const disableMouse = () => {
+    document.addEventListener('mousedown', (e) => e.preventDefault());
+    document.addEventListener('click', (e) => e.preventDefault());
+    document.addEventListener('contextmenu', (e) => e.preventDefault());
+  };
+
+  const enableMouse = () => {
+    document.removeEventListener('mousedown', (e) => e.preventDefault());
+    document.removeEventListener('click', (e) => e.preventDefault());
+    document.removeEventListener('contextmenu', (e) => e.preventDefault());
+  };
+
+  const disableKeyboard = () => {
+    document.addEventListener('keydown', (e) => e.preventDefault());
+    document.addEventListener('keyup', (e) => e.preventDefault());
+  };
+
+  const enableKeyboard = () => {
+    document.removeEventListener('keydown', (e) => e.preventDefault());
+    document.removeEventListener('keyup', (e) => e.preventDefault());
+  };
+
+  if (!hasRun && (board.hasWon() || board.hasLost())) {
+    setHasRun(true);
+    disableMouse();
+    disableKeyboard();
+    console.log("DISABLE")
+     setTimeout(async () => {
+      console.log('3 seconds have passed');
+      await endGame();
+      setBoard(new Board());
+      enableMouse();
+      enableKeyboard();
+      setHasRun(false);
+    }, 4000); // 延迟 3 秒
+  }
 
   if (isLoading) {
     return <p>Loading...</p>;
@@ -456,18 +481,6 @@ const BoardView = () => {
     setIsLoadingLeaber(true);
   };
 
-  const overAndEnd = async () => {
-    if (board.hasLost() && !isOver) {
-      // 设置延时操作
-      setTimeout(async () => {
-        console.log("gameover");
-        setIsProcessing(true);
-        isOver = true;
-      }, 5000); // 延时 3 秒
-    }
-  };
-  // overAndEnd();
-
   return (
     <div className="container">
       <ToastContainer
@@ -485,7 +498,11 @@ const BoardView = () => {
       />
       {isLoggedIn ? (
         <div className="game-container">
-          <SpinnerModal isProcessing={isProcessing} isSuccess={isSuccess} isFailed={isFailed} />
+          <SpinnerModal
+            isProcessing={isProcessing}
+            isSuccess={isSuccess}
+            isFailed={isFailed}
+          />
           <div className="details-box">
             <div
               className={`resetButton ${board.score > 0 ? "disabled" : ""}`}
@@ -513,7 +530,7 @@ const BoardView = () => {
           <div className="board">
             {cells}
             {tiles}
-            <GameOverlay onRestart={overGame} board={board} />
+            <GameOverlay board={board} />
           </div>
         </div>
       ) : (

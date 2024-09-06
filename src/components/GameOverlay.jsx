@@ -1,11 +1,11 @@
 import React from "react";
 import TryAgainLogo from "../assets/img/try-again.gif";
-const GameOverlay = ({ onRestart, board }) => {
+const GameOverlay = ({ board }) => {
   if (board.hasWon()) {
     return <div className="tile2048"></div>;
   } else if (board.hasLost()) {
     return (
-      <div className="gameOver" onClick={onRestart}>
+      <div className="gameOver" >
         <img
           src={TryAgainLogo}
           alt="Inténtalo de nuevo!!"
