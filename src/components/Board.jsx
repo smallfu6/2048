@@ -44,6 +44,13 @@ const BoardView = () => {
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [leaderboardData, setLeaderboardData] = useState(null);
   const [hasRun, setHasRun] = useState(false); // 确保操作只执行一次
+  const nftLinks = [
+    { name: "InitiationBadge", link: "https://i.postimg.cc/XN5pQnvm/1750494639.jpg" },
+    { name: "ValorBadge", link: "https://i.postimg.cc/mrqgynWT/1421317652.jpg" },
+    { name: "WisdomBadge", link: "https://i.postimg.cc/LX16CVmL/535677802.jpg" },
+    { name: "GloryBadge", link: "https://i.postimg.cc/D0QfFyJz/1488291647.jpg" },
+  ];
+
 
 
   useEffect(() => {
@@ -165,7 +172,7 @@ const BoardView = () => {
     };
 
     initialize();
-  }, [board]);
+  }, [board, badgeList]);
 
  
 
@@ -286,7 +293,8 @@ const BoardView = () => {
   const updateBadgeList = async () => {
     if (gameContract && address) {
       try {
-        const badges = await gameContract.getPlayerAllNFT(address);
+        const badgesMetaList = await gameContract.getPlayerAllNFT(address);
+        const badges = generateNewUrlList(badgesMetaList, nftLinks)
         setBadgeList(badges);
       } catch (error) {
         console.error("Error fetching score:", error);
