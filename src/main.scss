@@ -45,6 +45,7 @@ body {
 
 .container {
   display: flex;
+  position: 'relative';
   justify-content: center; /* 子元素水平居中对齐 */
   align-items: flex-start; /* 子元素垂直对齐到顶部 */
   padding: 20px;

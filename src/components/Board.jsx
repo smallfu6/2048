@@ -412,57 +412,25 @@ const BoardView = () => {
     return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
   };
 
-  const disableMouse = () => {
-    document.addEventListener('mousedown', (e) => e.preventDefault());
-    document.addEventListener('click', (e) => e.preventDefault());
-    document.addEventListener('contextmenu', (e) => e.preventDefault());
-  };
-
-  const enableMouse = () => {
-    document.removeEventListener('mousedown', (e) => e.preventDefault());
-    document.removeEventListener('click', (e) => e.preventDefault());
-    document.removeEventListener('contextmenu', (e) => e.preventDefault());
-  };
-
-  const disableKeyboard = () => {
-    document.addEventListener('keydown', (e) => e.preventDefault());
-    document.addEventListener('keyup', (e) => e.preventDefault());
-  };
-
-  const enableKeyboard = () => {
-    document.removeEventListener('keydown', (e) => e.preventDefault());
-    document.removeEventListener('keyup', (e) => e.preventDefault());
-  };
-
   if (!hasRun && (board.hasWon() || board.hasLost())) {
     setHasRun(true);
-    disableMouse();
-    disableKeyboard();
-    console.log("DISABLE")
-     setTimeout(async () => {
-      console.log('3 seconds have passed');
+    setTimeout(async () => {
+      console.log("3 seconds have passed");
       await endGame();
       setBoard(new Board());
-      enableMouse();
-      enableKeyboard();
       setHasRun(false);
-    }, 4000); // 延迟 3 秒
+    }, 3000); // 延迟 3 秒
   }
 
   if (isLoading) {
     return <p>Loading...</p>;
   }
 
-  // console.log(board);
-
   const openLeaderboard = async () => {
     setShowLeaderboard(true);
 
     if (gameContract && address) {
       try {
-        // console.log(gameContract);
-        // console.log(address);
-
         const leaber = await gameContract.getTop10Players();
         const filteredData = leaber.filter(
           (item) => item[0] !== "0x0000000000000000000000000000000000000000"
@@ -483,6 +451,7 @@ const BoardView = () => {
 
   return (
     <div className="container">
+      {hasRun && <div className="overlay" />}
       <ToastContainer
         position="top-right"
         autoClose={5000}
