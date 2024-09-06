@@ -22,6 +22,15 @@ body {
   font-size: 21px;
 }
 
+
+/* Main title with shadow and animation */
+.main-title {
+  font-size: 3rem; /* Adjust as needed */
+  text-align: left;
+  color: #fff; /* Text color */
+  animation: shadow-appear 1s ease-out; /* Animation for shadow effect */
+}
+
 .text {
   order: 2;
   padding-top: 40px;
@@ -41,7 +50,7 @@ body {
 .game-container {
   flex: 2;
   /* 设置容器的宽度，根据需要调整 */
-  max-width: 70%; /* 减小宽度使其更靠近中间 */
+  max-width: 50%; /* 减小宽度使其更靠近中间 */
 }
 
 .info-container {

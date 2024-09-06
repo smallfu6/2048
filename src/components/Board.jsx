@@ -14,7 +14,7 @@ import InfoCard from "./InfoCard";
 import SpinnerModal from "./SpinnerModal";
 import Season from "./Season";
 
-const CONTRACT_ADDRESS = "0xA8c1499c108D8783c6c413c51683D003E4f6fa54";
+const CONTRACT_ADDRESS = "0xb339921d60C1d093341Ff20578b0077a7BFF3632";
 
 const LineaSepoliaChainId = "0xe705";
 
@@ -166,7 +166,7 @@ const BoardView = () => {
       },
       blockExplorerUrls: ["https://sepolia.linea.build"],
     };
-    
+
     try {
       // 请求切换到 Linea Sepolia 网络
       await provider.send("wallet_switchEthereumChain", [
@@ -322,15 +322,10 @@ const BoardView = () => {
       }
     }
 
-    const payEth = ethers.parseEther("0");
-
     // 保存棋盘和的当前分数
     if (signerContract && address) {
       try {
-        const tx = await signerContract.updateBoard(elements, board.score, {
-          value: payEth,
-          gasLimit: 300000,
-        });
+        const tx = await signerContract.updateBoard(elements, board.score);
         const receipt = await tx.wait();
         console.log("Transaction confirmed:", receipt);
         setIsSuccess(true);
@@ -364,9 +359,7 @@ const BoardView = () => {
       try {
         // console.log(signerContract);
         // console.log(board.score);
-        const tx = await signerContract.endGame(board.score, {
-          gasLimit: 300000,
-        });
+        const tx = await signerContract.endGame(board.score);
         const receipt = await tx.wait();
         console.log("Transaction confirmed:", receipt);
         setBoard(new Board());
@@ -396,9 +389,7 @@ const BoardView = () => {
       try {
         // console.log(signerContract);
         // console.log(board.score);
-        const tx = await signerContract.mintNFT(level, {
-          gasLimit: 300000,
-        });
+        const tx = await signerContract.mintNFT(level);
         const receipt = await tx.wait();
         console.log("Transaction confirmed:", receipt);
 

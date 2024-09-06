@@ -11,7 +11,7 @@ const App = () => {
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <>
-    <h1>2048</h1>
+    <h1 className="main-title">2048 Season1</h1>
     <App />
   </>
 );

@@ -24,7 +24,7 @@ function RuleModal({ isOpen, onClose }) {
               className="badge-thumb"
             />
             <div className="badge-info">
-              <strong>Initiation Badge</strong> (require score >10,000) 
+              <strong>Initiation Badge</strong> (require score >100,000) 
               <p>
                 <strong>[Level1]</strong> For players who are just starting the game, symbolizing the
                 beginning of their adventure in the world of 2048.
@@ -40,7 +40,7 @@ function RuleModal({ isOpen, onClose }) {
               className="badge-thumb"
             />
             <div className="badge-info">
-              <strong>Valor Badge</strong> (require score >20,000)
+              <strong>Valor Badge</strong> (require score >200,000)
               <p>
               <strong>[Level2]</strong> For players who have mastered certain skills, symbolizing their
                 continuous progress and fighting spirit in the game.
@@ -56,7 +56,7 @@ function RuleModal({ isOpen, onClose }) {
               className="badge-thumb"
             />
             <div className="badge-info">
-              <strong>Wisdom Badge</strong> (require score >50,000)
+              <strong>Wisdom Badge</strong> (require score >500,000)
               <p>
               <strong>[Level3]</strong> For those who can think deeply and plan strategically,
                 symbolizing their wisdom and strategy in 2048.
@@ -72,7 +72,7 @@ function RuleModal({ isOpen, onClose }) {
               className="badge-thumb"
             />
             <div className="badge-info">
-              <strong>Glory Badge</strong> (require score >200,000)
+              <strong>Glory Badge</strong> (require score >2000,000)
               <p>
               <strong>[Level4]</strong> For top players, representing their outstanding achievements and
                 supreme glory in the world of 2048.

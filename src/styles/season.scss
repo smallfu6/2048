@@ -1,36 +1,83 @@
-.season-info {
-    color: red;
-    margin-top: 10px;
-  }
-  
-  .season-title {
-    text-align: center; /* 居中对齐 */
-    font-weight: bold;  /* 粗体 */
-    font-size: 24px;    /* 设置标题的字体大小，根据需要调整 */
-    margin-bottom: 10px; /* 设置标题与其他内容的间距 */
-  }
+/* Keyframes for floating animation */
+@keyframes floating {
+    0% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+    100% {
+      transform: translateY(0);
+    }
+}
 
-  .season-desc {
-    padding-right: 20px;
-    width: 440px;
-  }
-  
-  .season-croakpool, .season-desc {
-    font-size: 20px; /* 设置其他内容的字体大小，根据需要调整 */
-    font-weight: bold;  
-  }
-  
-  .season-thumbnail-list {
+/* Keyframes for carousel animation */
+@keyframes carousel {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+/* Title animation: floating up and down */
+.animated-title {
+    font-size: 2rem;
+    text-align: center;
+    font-weight: bold;
+    animation: floating 3s ease-in-out infinite;
+}
+
+/* Croak pool animation: floating */
+.animated-croakpool {
+    text-align: center;
+    font-size: 1.5rem;
+    margin-top: 30px;
+    animation: floating 3s ease-in-out infinite;
+    display: inline-flex; /* Use inline-flex for aligning items */
+    align-items: center; /* Align items vertically */
+}
+
+.croak-icon {
+    margin-left: 8px; /* Adjust spacing between text and icon */
+    width: 32px; /* Size of the icon */
+    height: 32px; /* Size of the icon */
+    vertical-align: middle;
+}
+/* Description animation: floating */
+.animated-desc {
+    text-align: left;
+    font-size: 1rem;
+    margin-top: 10px;
+    margin-right: 30px;
+    animation: floating 3s ease-in-out infinite;
+}
+
+.season-desc {
+    margin-top: 10px;
+}
+
+/* Thumbnails container */
+.season-thumbnail-wrapper {
+    overflow: hidden;
+    width: 440px; /* Adjust based on your design */
+    margin-top: 20px;
+}
+
+.season-thumbnail-list {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center; /* 居中对齐缩略图 */
-  }
-  
-  .season-thumbnail-item {
-    margin: 10px; /* 缩略图之间的间距 */
-  }
-  
-  .season-thumbnail-item img {
-    max-width: 100px; /* 设置缩略图的最大宽度，根据需要调整 */
-    height: auto;
-  }
+    animation: carousel 10s linear infinite; /* Adjust the duration to control the speed of scrolling */
+}
+
+.season-thumbnail-item {
+    min-width: 100px; /* Adjust based on your design */
+    margin-right: 10px;
+}
+
+.season-thumbnail-item img {
+    width: 100px; /* Adjust based on your design */
+    height: 100px;
+    object-fit: cover;
+    border-radius: 10px;
+}
