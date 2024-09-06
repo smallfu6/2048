@@ -24,7 +24,6 @@ const BoardView = () => {
   const [gameContract, setContract] = useState(null);
   const [signerContract, setSignerContract] = useState(null);
   const [address, setAddress] = useState(null);
-  const [connected, setConnected] = useState(false);
   const [score, setScore] = useState(null);
   const [level, setLevel] = useState(null);
   const [badgeList, setBadgeList] = useState(null);
@@ -208,7 +207,6 @@ const BoardView = () => {
         );
         setContract(newContract);
         setAddress(accounts[0]);
-        setConnected(true);
       } catch (error) {
         console.error("Connection error:", error);
       }
@@ -218,7 +216,6 @@ const BoardView = () => {
   const disconnectWallet = () => {
     setContract(null);
     setAddress(null);
-    setConnected(false);
   };
 
   const updateLevel = async () => {
