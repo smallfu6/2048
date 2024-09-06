@@ -72,7 +72,7 @@ function RuleModal({ isOpen, onClose }) {
               className="badge-thumb"
             />
             <div className="badge-info">
-              <strong>Glory Badge</strong> (require score >2000,000)
+              <strong>Glory Badge</strong> (require score >2,000,000)
               <p>
               <strong>[Level4]</strong> For top players, representing their outstanding achievements and
                 supreme glory in the world of 2048.

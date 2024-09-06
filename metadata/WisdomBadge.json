@@ -1,0 +1,20 @@
+{
+  "name": "Wisdom Badge",
+  "description": "[Level 3] For those who can think deeply and plan strategically, symbolizing their wisdom and strategy in 2048. This badge is awarded to players with a score greater than 500,000.",
+  "image": "https://i.postimg.cc/LX16CVmL/535677802.jpg",
+  "attributes": [
+    {
+      "trait_type": "Level",
+      "value": "3"
+    },
+    {
+      "trait_type": "Score Requirement",
+      "value": ">500,000"
+    },
+    {
+      "trait_type": "Rarity",
+      "value": "Epic"
+    }
+  ]
+}
+

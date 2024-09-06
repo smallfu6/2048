@@ -1,0 +1,20 @@
+{
+  "name": "Glory Badge",
+  "description": "[Level 4] For top players, representing their outstanding achievements and supreme glory in the world of 2048. This badge is awarded to players with a score greater than 2,000,000.",
+  "image": "https://i.postimg.cc/D0QfFyJz/1488291647.jpg",
+  "attributes": [
+    {
+      "trait_type": "Level",
+      "value": "4"
+    },
+    {
+      "trait_type": "Score Requirement",
+      "value": ">2,000,000"
+    },
+    {
+      "trait_type": "Rarity",
+      "value": "Legendary"
+    }
+  ]
+}
+

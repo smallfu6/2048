@@ -14,7 +14,7 @@ import InfoCard from "./InfoCard";
 import SpinnerModal from "./SpinnerModal";
 import Season from "./Season";
 
-const CONTRACT_ADDRESS = "0xb339921d60C1d093341Ff20578b0077a7BFF3632";
+const CONTRACT_ADDRESS = "0x6780148Fc1BbfdaFF7d956BB60c846aEE6530Fd3";
 
 const LineaSepoliaChainId = "0xe705";
 
@@ -40,7 +40,15 @@ const BoardView = () => {
   const [leaderboardData, setLeaderboardData] = useState(null);
   const [hasRun, setHasRun] = useState(false); // 确保操作只执行一次
 
+
   useEffect(() => {
+    const nftLinks = [
+      { name: "InitiationBadge", link: "https://i.postimg.cc/XN5pQnvm/1750494639.jpg" },
+      { name: "ValorBadge", link: "https://i.postimg.cc/mrqgynWT/1421317652.jpg" },
+      { name: "WisdomBadge", link: "https://i.postimg.cc/LX16CVmL/535677802.jpg" },
+      { name: "GloryBadge", link: "https://i.postimg.cc/D0QfFyJz/1488291647.jpg" },
+    ];
+  
     const initialize = async () => {
       if (window.ethereum) {
         try {
@@ -114,7 +122,8 @@ const BoardView = () => {
 
           const getBadgeList = async () => {
             try {
-              const badges = await newContract.getPlayerAllNFT(account);
+              const badgesMetaList = await newContract.getPlayerAllNFT(account);
+              const badges = generateNewUrlList(badgesMetaList, nftLinks)
               setBadgeList(badges);
             } catch (error) {
               console.error("Error fetching badge list:", error);
@@ -148,6 +157,27 @@ const BoardView = () => {
 
     initialize();
   }, [board]);
+
+ 
+
+  const generateNewUrlList = (urls, correspondences) => {
+    return urls.map(url => {
+      // 提取 JSON 文件名部分
+      const fileName = url.split('/').pop().replace('.json', '');
+  
+      // 查找对应关系
+      const correspondence = correspondences.find(cor => cor.name === fileName);
+  
+      // 如果有匹配的 ID, 则生成新的 URL
+      if (correspondence) {
+        const newUrl = correspondence.link;
+        return newUrl;
+      }
+  
+      // 如果没有匹配的 ID，则保留原始 URL
+      return url;
+    });
+  };
 
   const switchToLineaSepolia = async (provider) => {
     const networkParams = {

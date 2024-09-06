@@ -1,0 +1,20 @@
+{
+  "name": "Valor Badge",
+  "description": "[Level 2] For players who have mastered certain skills, symbolizing their continuous progress and fighting spirit in the game. This badge is awarded to players with a score greater than 200,000.",
+  "image": "https://i.postimg.cc/mrqgynWT/1421317652.jpg",
+  "attributes": [
+    {
+      "trait_type": "Level",
+      "value": "2"
+    },
+    {
+      "trait_type": "Score Requirement",
+      "value": ">200,000"
+    },
+    {
+      "trait_type": "Rarity",
+      "value": "Uncommon"
+    }
+  ]
+}
+

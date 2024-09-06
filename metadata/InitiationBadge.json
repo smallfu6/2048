@@ -1,0 +1,20 @@
+{
+  "name": "Initiation Badge",
+  "description": "[Level 1] For players who are just starting the game, symbolizing the beginning of their adventure in the world of 2048. This badge is awarded to players with a score greater than 100,000.",
+  "image": "https://i.postimg.cc/XN5pQnvm/1750494639.jpg",
+  "attributes": [
+    {
+      "trait_type": "Level",
+      "value": "1"
+    },
+    {
+      "trait_type": "Score Requirement",
+      "value": ">100,000"
+    },
+    {
+      "trait_type": "Rarity",
+      "value": "Common"
+    }
+  ]
+}
+
