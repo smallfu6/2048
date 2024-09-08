@@ -25,7 +25,6 @@ const LineaMainnetChainId = "0xe708";
 
 const BoardView = () => {
   const [board, setBoard] = useState(new Board());
-  const [provider, setProvider] = useState(null);
   const [gameContract, setContract] = useState(null);
   const [signerContract, setSignerContract] = useState(null);
   const [address, setAddress] = useState(null);
@@ -66,7 +65,6 @@ const BoardView = () => {
         try {
           // 创建 BrowserProvider 实例
           const newProvider = new ethers.BrowserProvider(window.ethereum);
-          setProvider(newProvider);
 
           // 获取当前链 ID
           const currentChainId = await newProvider.send("eth_chainId", []);
@@ -255,28 +253,28 @@ const BoardView = () => {
     }
   };
 
-  const connectWallet = async () => {
-    if (provider) {
-      try {
-        const accounts = await provider.send("eth_requestAccounts", []);
-        const newSigner = provider.getSigner();
-        const newContract = new ethers.Contract(
-          CONTRACT_ADDRESS,
-          CONTRACT_ABI,
-          newSigner
-        );
-        setContract(newContract);
-        setAddress(accounts[0]);
-      } catch (error) {
-        console.error("Connection error:", error);
-      }
-    }
-  };
+  // const connectWallet = async () => {
+  //   if (provider) {
+  //     try {
+  //       const accounts = await provider.send("eth_requestAccounts", []);
+  //       const newSigner = provider.getSigner();
+  //       const newContract = new ethers.Contract(
+  //         CONTRACT_ADDRESS,
+  //         CONTRACT_ABI,
+  //         newSigner
+  //       );
+  //       setContract(newContract);
+  //       setAddress(accounts[0]);
+  //     } catch (error) {
+  //       console.error("Connection error:", error);
+  //     }
+  //   }
+  // };
 
-  const disconnectWallet = () => {
-    setContract(null);
-    setAddress(null);
-  };
+  // const disconnectWallet = () => {
+  //   setContract(null);
+  //   setAddress(null);
+  // };
 
   const updateLevel = async () => {
     if (gameContract && address) {
