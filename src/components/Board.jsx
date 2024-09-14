@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { toast, ToastContainer, Zoom } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+
+
 import Tile from "./Tile";
 import Cell from "./Cell";
 import { Board } from "../helper";
@@ -13,6 +15,7 @@ import LeaderboardModal from "./LeaderboardModal";
 import InfoCard from "./InfoCard";
 import SpinnerModal from "./SpinnerModal";
 import Season from "./Season";
+import WalletInfo from "./WalletInfo";
 
 // TODO: env
 // const CONTRACT_ADDRESS = "0x6780148Fc1BbfdaFF7d956BB60c846aEE6530Fd3"; // linea sepolia
@@ -478,9 +481,9 @@ const BoardView = () => {
     }, 3000); // 延迟 3 秒
   }
 
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
+  // if (isLoading) {
+  //   return <p>Loading...</p>;
+  // }
 
   const openLeaderboard = async () => {
     setShowLeaderboard(true);
@@ -507,6 +510,7 @@ const BoardView = () => {
 
   return (
     <div className="container">
+      <WalletInfo />
       {hasRun && <div className="overlay" />}
       <ToastContainer
         position="top-right"

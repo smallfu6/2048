@@ -1,11 +1,17 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { ThirdwebProvider } from "thirdweb/react";
+
+
 import BoardView from "./components/Board";
 import "./main.scss";
 import "./styles.scss";
 
 const App = () => {
-  return <BoardView />;
+  return (<ThirdwebProvider>
+    <BoardView />
+  </ThirdwebProvider>
+  );
 };
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
