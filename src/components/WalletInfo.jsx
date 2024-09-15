@@ -1,12 +1,8 @@
+import { ConnectButton, useActiveAccount, useActiveWalletConnectionStatus } from "thirdweb/react";
+import { linea } from "thirdweb/chains";
+import { createWallet } from "thirdweb/wallets";
 
-import { ConnectButton } from "thirdweb/react";
-import {client } from "../client";
-
-import {
-  createWallet,
-} from "thirdweb/wallets";
-
-
+import { client } from "../client";
 
 const wallets = [
   createWallet("io.metamask"),
@@ -16,16 +12,22 @@ const wallets = [
   createWallet("io.zerion.wallet"),
 ];
 
+const WalletInfo = () => {
+  const account = useActiveAccount();
+  console.log("address", account);
+  console.log("status", useActiveWalletConnectionStatus());
 
-const WalletInfo = ()=> {
-    return (
-        <ConnectButton
+
+  return (
+    <div className="wallet-info-container">
+      <ConnectButton
         client={client}
+        chain={linea}
         wallets={wallets}
         connectModal={{ size: "compact" }}
       />
-    );
+    </div>
+  );
 };
-
 
 export default WalletInfo;

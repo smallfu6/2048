@@ -15,7 +15,6 @@ import LeaderboardModal from "./LeaderboardModal";
 import InfoCard from "./InfoCard";
 import SpinnerModal from "./SpinnerModal";
 import Season from "./Season";
-import WalletInfo from "./WalletInfo";
 
 // TODO: env
 // const CONTRACT_ADDRESS = "0x6780148Fc1BbfdaFF7d956BB60c846aEE6530Fd3"; // linea sepolia
@@ -510,7 +509,7 @@ const BoardView = () => {
 
   return (
     <div className="container">
-      <WalletInfo />
+   
       {hasRun && <div className="overlay" />}
       <ToastContainer
         position="top-right"

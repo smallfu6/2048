@@ -53,11 +53,21 @@ body {
   margin: 0 auto; /* 在页面中水平居中 */
 }
 
+
+.wallet-info-container {
+  position: absolute;
+  top: 10px; /* 距离顶部10px */
+  right: 10px; /* 距离右边10px */
+  z-index: 1000; /* 确保在其他元素上面 */
+}
+
 .game-container {
   flex: 2;
   /* 设置容器的宽度，根据需要调整 */
   max-width: 50%; /* 减小宽度使其更靠近中间 */
 }
+
+
 
 .info-container {
   flex: 1.5; /* 增加比例，使info-container占据更大的空间 */

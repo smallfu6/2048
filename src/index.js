@@ -1,14 +1,18 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { ThirdwebProvider } from "thirdweb/react";
-
-
-import BoardView from "./components/Board";
 import "./main.scss";
 import "./styles.scss";
 
+import { ThirdwebProvider } from "thirdweb/react";
+
+import BoardView from "./components/Board";
+import WalletInfo from "./components/WalletInfo";
+
+
+
 const App = () => {
   return (<ThirdwebProvider>
+    <WalletInfo />
     <BoardView />
   </ThirdwebProvider>
   );
