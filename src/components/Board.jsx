@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import { toast, ToastContainer, Zoom } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-
-
 import Tile from "./Tile";
 import Cell from "./Cell";
 import { Board } from "../helper";
@@ -14,16 +12,12 @@ import { CONTRACT_ABI } from "./ABI";
 import LeaderboardModal from "./LeaderboardModal";
 import InfoCard from "./InfoCard";
 import SpinnerModal from "./SpinnerModal";
-import Season from "./Season";
-
 // TODO: env
 // const CONTRACT_ADDRESS = "0x6780148Fc1BbfdaFF7d956BB60c846aEE6530Fd3"; // linea sepolia
 const CONTRACT_ADDRESS = "0x2a065C09B91b1a4fc2F3f26bf3893338700BB36a"; // linea mainnet
 
-
 // const LineaSepoliaChainId = "0xe705";
 const LineaMainnetChainId = "0xe708";
-
 
 const BoardView = () => {
   const [board, setBoard] = useState(new Board());
@@ -46,22 +40,44 @@ const BoardView = () => {
   const [leaderboardData, setLeaderboardData] = useState(null);
   const [hasRun, setHasRun] = useState(false); // 确保操作只执行一次
   const nftLinks = [
-    { name: "InitiationBadge", link: "https://i.postimg.cc/XN5pQnvm/1750494639.jpg" },
-    { name: "ValorBadge", link: "https://i.postimg.cc/mrqgynWT/1421317652.jpg" },
-    { name: "WisdomBadge", link: "https://i.postimg.cc/LX16CVmL/535677802.jpg" },
-    { name: "GloryBadge", link: "https://i.postimg.cc/D0QfFyJz/1488291647.jpg" },
+    {
+      name: "InitiationBadge",
+      link: "https://i.postimg.cc/XN5pQnvm/1750494639.jpg",
+    },
+    {
+      name: "ValorBadge",
+      link: "https://i.postimg.cc/mrqgynWT/1421317652.jpg",
+    },
+    {
+      name: "WisdomBadge",
+      link: "https://i.postimg.cc/LX16CVmL/535677802.jpg",
+    },
+    {
+      name: "GloryBadge",
+      link: "https://i.postimg.cc/D0QfFyJz/1488291647.jpg",
+    },
   ];
-
-
 
   useEffect(() => {
     const nftLinks = [
-      { name: "InitiationBadge", link: "https://i.postimg.cc/XN5pQnvm/1750494639.jpg" },
-      { name: "ValorBadge", link: "https://i.postimg.cc/mrqgynWT/1421317652.jpg" },
-      { name: "WisdomBadge", link: "https://i.postimg.cc/LX16CVmL/535677802.jpg" },
-      { name: "GloryBadge", link: "https://i.postimg.cc/D0QfFyJz/1488291647.jpg" },
+      {
+        name: "InitiationBadge",
+        link: "https://i.postimg.cc/XN5pQnvm/1750494639.jpg",
+      },
+      {
+        name: "ValorBadge",
+        link: "https://i.postimg.cc/mrqgynWT/1421317652.jpg",
+      },
+      {
+        name: "WisdomBadge",
+        link: "https://i.postimg.cc/LX16CVmL/535677802.jpg",
+      },
+      {
+        name: "GloryBadge",
+        link: "https://i.postimg.cc/D0QfFyJz/1488291647.jpg",
+      },
     ];
-  
+
     const initialize = async () => {
       if (window.ethereum) {
         try {
@@ -139,7 +155,7 @@ const BoardView = () => {
           const getBadgeList = async () => {
             try {
               const badgesMetaList = await newContract.getPlayerAllNFT(account);
-              const badges = generateNewUrlList(badgesMetaList, nftLinks)
+              const badges = generateNewUrlList(badgesMetaList, nftLinks);
               setBadgeList(badges);
             } catch (error) {
               console.error("Error fetching badge list:", error);
@@ -171,25 +187,25 @@ const BoardView = () => {
       }
     };
 
-    initialize();
+    // initialize();
   }, [board, badgeList]);
 
- 
-
   const generateNewUrlList = (urls, correspondences) => {
-    return urls.map(url => {
+    return urls.map((url) => {
       // 提取 JSON 文件名部分
-      const fileName = url.split('/').pop().replace('.json', '');
-  
+      const fileName = url.split("/").pop().replace(".json", "");
+
       // 查找对应关系
-      const correspondence = correspondences.find(cor => cor.name === fileName);
-  
+      const correspondence = correspondences.find(
+        (cor) => cor.name === fileName
+      );
+
       // 如果有匹配的 ID, 则生成新的 URL
       if (correspondence) {
         const newUrl = correspondence.link;
         return newUrl;
       }
-  
+
       // 如果没有匹配的 ID，则保留原始 URL
       return url;
     });
@@ -206,10 +222,10 @@ const BoardView = () => {
     //     decimals: 18,
     //   },
     //   blockExplorerUrls: ["https://sepolia.linea.build"],
-    // }; 
+    // };
 
     // linea mainnet
-     const networkParams = {
+    const networkParams = {
       chainId: LineaMainnetChainId,
       chainName: "Linea Mainnet",
       rpcUrls: ["https://linea-mainnet.infura.io/v3/"],
@@ -219,8 +235,7 @@ const BoardView = () => {
         decimals: 18,
       },
       blockExplorerUrls: ["https://lineascan.build"],
-    }; 
-    
+    };
 
     try {
       // 请求切换到 Linea Sepolia 网络
@@ -294,7 +309,7 @@ const BoardView = () => {
     if (gameContract && address) {
       try {
         const badgesMetaList = await gameContract.getPlayerAllNFT(address);
-        const badges = generateNewUrlList(badgesMetaList, nftLinks)
+        const badges = generateNewUrlList(badgesMetaList, nftLinks);
         setBadgeList(badges);
       } catch (error) {
         console.error("Error fetching score:", error);
@@ -508,8 +523,7 @@ const BoardView = () => {
   };
 
   return (
-    <div className="container">
-   
+    <div className="game-container">
       {hasRun && <div className="overlay" />}
       <ToastContainer
         position="top-right"
@@ -524,88 +538,40 @@ const BoardView = () => {
         theme="light"
         transition={Zoom}
       />
-      {isLoggedIn ? (
-        <div className="game-container">
-          <SpinnerModal
-            isProcessing={isProcessing}
-            isSuccess={isSuccess}
-            isFailed={isFailed}
-          />
-          <div className="details-box">
-            <div
-              className={`resetButton ${board.score > 0 ? "disabled" : ""}`}
-              onClick={board.score > 0 ? null : resetGame}
-            >
-              New
-            </div>
-            <div
-              className={`saveButton ${board.score === 0 ? "disabled" : ""}`}
-              onClick={board.score > 0 ? saveGame : null}
-            >
-              Save
-            </div>
-            <div
-              className={`endButton ${board.score === 0 ? "disabled" : ""}`}
-              onClick={board.score > 0 ? endGame : null}
-            >
-              End
-            </div>
-            <div className="score-box">
-              <div className="score-header">PIONTS</div>
-              <div>{board.score}</div>
-            </div>
-          </div>
-          <div className="board">
-            {cells}
-            {tiles}
-            <GameOverlay board={board} />
-          </div>
-        </div>
-      ) : (
-        <p>Connecting to MetaMask...</p>
-      )}
 
-      <div className="info-container">
-        <div className="game-button" onClick={openLeaderboard}>
-          Leaderboard
+      <SpinnerModal
+        isProcessing={isProcessing}
+        isSuccess={isSuccess}
+        isFailed={isFailed}
+      />
+      <div className="details-box">
+        <div
+          className={`resetButton ${board.score > 0 ? "disabled" : ""}`}
+          onClick={board.score > 0 ? null : resetGame}
+        >
+          New
         </div>
-        {showLeaderboard && (
-          <LeaderboardModal onClose={closeLeaderboard}>
-            <h2>Leaderboard</h2>
-            <table>
-              <thead>
-                <tr>
-                  <th>Player</th>
-                  <th>Score</th>
-                </tr>
-              </thead>
-              <tbody>
-                {isLoadingLeaber ? (
-                  <tr>
-                    <td>Loading...</td>
-                  </tr>
-                ) : (
-                  leaderboardData &&
-                  leaderboardData.map((entry, index) => (
-                    <tr key={index}>
-                      <td>{formatAddress(entry[0])}</td>
-                      <td>{entry[1].toString()}</td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </LeaderboardModal>
-        )}
-        <InfoCard
-          address={formatAddress(address)}
-          score={score !== null ? score : "Loading..."}
-          level={level !== null ? level : "Loading..."}
-          isMint={isMint}
-          onClick={mintNft}
-          thumbnails={badgeList}
-        />
-        <Season />
+        <div
+          className={`saveButton ${board.score === 0 ? "disabled" : ""}`}
+          onClick={board.score > 0 ? saveGame : null}
+        >
+          Save
+        </div>
+        <div
+          className={`endButton ${board.score === 0 ? "disabled" : ""}`}
+          onClick={board.score > 0 ? endGame : null}
+        >
+          End
+        </div>
+        <div className="score-box">
+          <div className="score-header">PIONTS</div>
+          <div>{board.score}</div>
+        </div>
+      </div>
+      <div className="board">
+        {cells}
+        {tiles}
+        <GameOverlay board={board} />
       </div>
     </div>
   );

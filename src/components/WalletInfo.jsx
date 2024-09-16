@@ -7,9 +7,9 @@ import { client } from "../client";
 const wallets = [
   createWallet("io.metamask"),
   createWallet("com.coinbase.wallet"),
-  createWallet("me.rainbow"),
-  createWallet("io.rabby"),
-  createWallet("io.zerion.wallet"),
+  createWallet("com.okex.wallet"),
+  createWallet("com.bitget.web3"),
+  createWallet("com.binance"),
 ];
 
 const WalletInfo = () => {
